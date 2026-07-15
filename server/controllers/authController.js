@@ -6,7 +6,6 @@ const register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
-        // Kiểm tra email đã tồn tại chưa
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
@@ -15,20 +14,16 @@ const register = async (req, res) => {
             });
         }
 
-        // Mã hóa mật khẩu
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Tạo user mới
         const user = new User({
             name,
             email,
             password: hashedPassword
         });
 
-        // Lưu vào MongoDB
         await user.save();
 
-        // Trả kết quả
         res.status(201).json({
             message: "Đăng ký thành công",
             user: {
@@ -52,7 +47,6 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Kiểm tra email có tồn tại không
         const user = await User.findOne({ email });
 
         if (!user) {
@@ -61,7 +55,6 @@ const login = async (req, res) => {
             });
         }
 
-        // So sánh mật khẩu
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
@@ -70,14 +63,12 @@ const login = async (req, res) => {
             });
         }
 
-        // Tạo token
         const token = jwt.sign(
             { id: user._id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );
 
-        // Trả kết quả
         res.status(200).json({
             message: "Đăng nhập thành công",
             token,

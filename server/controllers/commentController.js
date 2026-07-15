@@ -74,7 +74,6 @@ const deleteComment = async (req, res) => {
             });
         }
 
-        // Chỉ chủ sở hữu mới được xóa
         if (comment.author.toString() !== req.user.id) {
             return res.status(403).json({
                 message: "Bạn không có quyền xóa bình luận này"
