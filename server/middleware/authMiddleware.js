@@ -4,7 +4,6 @@ const authMiddleware = (req, res, next) => {
 
     try {
 
-        // Lấy header Authorization
         const authHeader = req.headers.authorization;
 
         if (!authHeader) {
@@ -13,7 +12,6 @@ const authMiddleware = (req, res, next) => {
             });
         }
 
-        // Bearer eyJhbGciOi...
         const token = authHeader.split(" ")[1];
 
         if (!token) {
@@ -22,13 +20,11 @@ const authMiddleware = (req, res, next) => {
             });
         }
 
-        // Giải mã token
         const decoded = jwt.verify(
             token,
             process.env.JWT_SECRET
         );
 
-        // Lưu thông tin user
         req.user = decoded;
 
         next();
