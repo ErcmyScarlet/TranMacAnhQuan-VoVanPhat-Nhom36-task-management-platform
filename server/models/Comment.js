@@ -15,8 +15,7 @@ const commentSchema = new mongoose.Schema(
         },
 
         project: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Project",
+            type: mongoose.Schema.Types.Mixed,
             required: true
         }
     },

@@ -4,25 +4,29 @@ const mongoose = require("mongoose");
 
 const createComment = async (req, res) => {
     try {
-
         const { project, content } = req.body;
 
-        if (!mongoose.isValidObjectId(project)) {
+        if (!project || !content?.trim()) {
             return res.status(400).json({
-                message: "Project ID không hợp lệ"
+                message: "Vui lòng cung cấp công việc và nội dung bình luận"
             });
         }
-        const existingProject = await Project.findById(project);
 
-        if (!existingProject) {
-            return res.status(404).json({
-                message: "Project không tồn tại"
-            });
+        const normalizedProject = project.toString().trim();
+
+        if (mongoose.isValidObjectId(normalizedProject)) {
+            const existingProject = await Project.findById(normalizedProject);
+
+            if (!existingProject) {
+                return res.status(404).json({
+                    message: "Project không tồn tại"
+                });
+            }
         }
 
         const comment = await Comment.create({
-            content,
-            project,
+            content: content.trim(),
+            project: normalizedProject,
             author: req.user.id
         });
 
@@ -30,15 +34,12 @@ const createComment = async (req, res) => {
             message: "Thêm bình luận thành công",
             comment
         });
-
     } catch (error) {
-
         console.error(error);
 
         res.status(500).json({
             message: "Lỗi server"
         });
-
     }
 };
 
@@ -65,8 +66,7 @@ const getCommentsByProject = async (req, res) => {
 };
 const deleteComment = async (req, res) => {
     try {
-
-        const comment = await Comment.findById(req.params.id);
+        const comment = await Comment.findById(req.params.commentId);
 
         if (!comment) {
             return res.status(404).json({
@@ -85,15 +85,12 @@ const deleteComment = async (req, res) => {
         res.status(200).json({
             message: "Xóa bình luận thành công"
         });
-
     } catch (error) {
-
         console.error(error);
 
         res.status(500).json({
             message: "Lỗi server"
         });
-
     }
 };
 
