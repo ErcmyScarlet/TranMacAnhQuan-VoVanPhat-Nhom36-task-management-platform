@@ -10,14 +10,20 @@ const Project = require("../models/Project");
    };
 
    exports.createProject = async (req, res) => {
-     try {
-       const { title, description } = req.body;
-       const project = await Project.create({ title, description, memberIds: [] });
-       res.status(201).json({ success: true, data: project });
-     } catch (err) {
-       res.status(400).json({ success: false, error: err.message });
-     }
-   };
+  try {
+    const { title, description, dueDate } = req.body;
+    const project = await Project.create({
+      title,
+      description,
+      dueDate,
+      createdBy: req.user?.id,
+      memberIds: req.user?.id ? [req.user.id] : [],
+    });
+    res.status(201).json({ success: true, data: project });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+};
    const Task = require("../models/Task");
 
 exports.getProjectById = async (req, res) => {
