@@ -1,41 +1,33 @@
 const Project = require("../models/Project");
 const Task = require("../models/Task");
 
-exports.createProject = async (req, res) => {
+exports.getProjects = async (req, res) => {
     try {
-        const { title, description } = req.body;
-        const owner = req.user?.id;
-
-        const project = new Project({
-            title,
-            description,
-            owner,
-        });
-
-        await project.save();
-
-        res.status(201).json({
-            message: "Tạo Project thành công",
-            project,
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Lỗi server",
-        });
+        const projects = await Project.find({
+            $or: [
+                { createdBy: req.user.id },
+                { memberIds: req.user.id },
+            ],
+        }).sort({ createdAt: -1 });
+        res.status(200).json({ success: true, data: projects });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
     }
 };
 
-exports.getProjects = async (req, res) => {
+exports.createProject = async (req, res) => {
     try {
-        const owner = req.user.id;
-        const projects = await Project.find({ owner }).sort({ createdAt: -1 });
-        res.status(200).json(projects);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Lỗi server",
+        const { title, description, dueDate } = req.body;
+        const project = await Project.create({
+            title,
+            description,
+            dueDate,
+            createdBy: req.user?.id,
+            memberIds: req.user?.id ? [req.user.id] : [],
         });
+        res.status(201).json({ success: true, data: project });
+    } catch (err) {
+        res.status(400).json({ success: false, error: err.message });
     }
 };
 
@@ -43,7 +35,7 @@ exports.getProjectById = async (req, res) => {
     try {
         const project = await Project.findOne({
             _id: req.params.id,
-            owner: req.user.id,
+            createdBy: req.user.id,
         });
 
         if (!project) {
@@ -66,7 +58,7 @@ exports.updateProject = async (req, res) => {
         const { title, description } = req.body;
 
         const project = await Project.findOneAndUpdate(
-            { _id: req.params.id, owner: req.user.id },
+            { _id: req.params.id, createdBy: req.user.id },
             { title, description },
             { new: true, runValidators: true }
         );
@@ -93,7 +85,7 @@ exports.deleteProject = async (req, res) => {
     try {
         const project = await Project.findOneAndDelete({
             _id: req.params.id,
-            owner: req.user.id,
+            createdBy: req.user.id,
         });
 
         if (!project) {

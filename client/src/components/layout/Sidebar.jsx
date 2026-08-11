@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { House, FolderSimple, ChartBar, SignOut } from "@phosphor-icons/react";
+import { Bell, FolderSimple, ChartBar, SignOut } from "@phosphor-icons/react";
 
 const navItems = [
-  { icon: House, label: "Trang chủ", href: "/" },
+  { icon: Bell, label: "Nhắc việc", href: "/" },
+  { icon: FolderSimple, label: "Project", href: "/projects" },
   { icon: ChartBar, label: "Dashboard", href: "/dashboard" },
   { icon: FolderSimple, label: "Projects", href: "/projects" },
 ];

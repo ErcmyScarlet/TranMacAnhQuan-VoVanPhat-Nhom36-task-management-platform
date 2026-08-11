@@ -14,6 +14,7 @@ function ProjectList() {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
+  const [dueDate, setDueDate] = useState("");
 
   const loadProjects = () => {
     setLoading(true);
@@ -27,12 +28,13 @@ function ProjectList() {
   }, []);
 
   const handleCreate = async (e) => {
-    e.preventDefault();
-    await createProject({ title });
-    setTitle("");
-    setOpen(false);
-    loadProjects();
-  };
+  e.preventDefault();
+  await createProject({ title, dueDate });
+  setTitle("");
+  setDueDate("");
+  setOpen(false);
+  loadProjects();
+};
 
   return (
     <div>
@@ -93,17 +95,25 @@ function ProjectList() {
         <form onSubmit={handleCreate} className="flex flex-col gap-4">
           <FormField label="Tên project" id="project-title">
             <Input
-              id="project-title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Ví dụ: Website bán hàng"
-              required
+            id="project-title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Ví dụ: Website bán hàng"
+            required
+            />
+          </FormField>
+          <FormField label="Hạn chót" id="project-duedate">
+            <Input
+            id="project-duedate"
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
             />
           </FormField>
           <Button type="submit">Tạo project</Button>
         </form>
       </Modal>
-    </div>
+</div>
   );
 }
 
