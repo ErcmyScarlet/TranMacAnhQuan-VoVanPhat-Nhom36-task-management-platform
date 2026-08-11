@@ -72,7 +72,6 @@ const changePassword = async (req, res) => {
 
         const user = await User.findById(req.user.id);
 
-        // Kiểm tra mật khẩu cũ
         const isMatch = await bcrypt.compare(
             currentPassword,
             user.password
@@ -84,7 +83,6 @@ const changePassword = async (req, res) => {
             });
         }
 
-        // Mã hóa mật khẩu mới
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
         user.password = hashedPassword;

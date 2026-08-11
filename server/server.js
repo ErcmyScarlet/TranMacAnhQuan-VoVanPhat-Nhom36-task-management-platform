@@ -1,4 +1,3 @@
-console.log(__filename);
 require("dotenv").config();
 
 const mongoose = require("mongoose");

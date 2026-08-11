@@ -10,11 +10,10 @@ const navItems = [
 
 function Sidebar() {
   const navigate = useNavigate();
+  const { logoutUser } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.dispatchEvent(new Event("auth:changed"));
+    logoutUser();
     navigate("/", { replace: true });
   };
 

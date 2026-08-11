@@ -35,9 +35,7 @@ function Dashboard() {
     }, [projectId]);
 
     const logout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        window.dispatchEvent(new Event("auth:changed"));
+        logoutUser();
         navigate("/", { replace: true });
     };
 

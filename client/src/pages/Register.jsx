@@ -6,9 +6,11 @@ import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import FormField from "../components/common/FormField";
 import { register } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 
 function Register() {
     const navigate = useNavigate();
+    const { loginUser } = useAuth();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -22,9 +24,8 @@ function Register() {
             const user = res?.user || res?.data?.user;
 
             if (token) {
-                localStorage.setItem("token", token);
-                localStorage.setItem("user", JSON.stringify(user || {}));
-                window.location.href = "/dashboard";
+                loginUser(token, user);
+                navigate("/dashboard", { replace: true });
             } else {
                 alert("Đăng ký thành công, vui lòng đăng nhập");
                 navigate("/");
