@@ -12,7 +12,6 @@ const {
     deleteProject
 } = require("../controllers/projectController");
 
-// Tạo Project
 router.post("/", authMiddleware, createProject);
 
 router.get("/", authMiddleware, getProjects);

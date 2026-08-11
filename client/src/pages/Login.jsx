@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SignIn, UserCircle, LockKey, ArrowRight } from "@phosphor-icons/react";
 
 import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import FormField from "../components/common/FormField";
 import { login } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
+    const navigate = useNavigate();
+    const { loginUser } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -23,9 +26,8 @@ function Login() {
                 throw new Error("Không nhận được token từ server");
             }
 
-            localStorage.setItem("token", token);
-            localStorage.setItem("user", JSON.stringify(user || {}));
-            window.location.href = "/dashboard";
+            loginUser(token, user);
+            navigate("/dashboard", { replace: true });
         } catch (err) {
             alert(err.response?.data?.message || err.message || "Đăng nhập thất bại");
         }

@@ -1,19 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import { House, FolderSimple, ChartBar, SignOut } from "@phosphor-icons/react";
+import { House, FolderSimple, ChartBar, UserCircle, SignOut } from "@phosphor-icons/react";
+import { useAuth } from "../../context/AuthContext";
 
 const navItems = [
   { icon: House, label: "Trang chủ", href: "/" },
   { icon: FolderSimple, label: "Project", href: "/" },
   { icon: ChartBar, label: "Dashboard", href: "/dashboard" },
+  { icon: UserCircle, label: "Profile", href: "/profile" },
 ];
 
 function Sidebar() {
   const navigate = useNavigate();
+  const { logoutUser } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.dispatchEvent(new Event("auth:changed"));
+    logoutUser();
     navigate("/", { replace: true });
   };
 

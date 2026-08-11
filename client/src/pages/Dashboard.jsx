@@ -5,15 +5,14 @@ import AppLayout from "../components/layout/AppLayout";
 import Card from "../components/common/Card";
 import Button from "../components/common/Button";
 import Badge from "../components/common/Badge";
+import { useAuth } from "../context/AuthContext";
 
 function Dashboard() {
     const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const { user, logoutUser } = useAuth();
 
     const logout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        window.dispatchEvent(new Event("auth:changed"));
+        logoutUser();
         navigate("/", { replace: true });
     };
 
