@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { House, FolderSimple, ChartBar, UserCircle, SignOut } from "@phosphor-icons/react";
+import { Link } from "react-router-dom";
+import { House, FolderSimple, ChartBar, UserCircle, SignOut, NotePencil } from "@phosphor-icons/react";
 import { useAuth } from "../../context/AuthContext";
 
 const navItems = [
   { icon: House, label: "Trang chủ", href: "/" },
-  { icon: FolderSimple, label: "Project", href: "/" },
+  { icon: NotePencil, label: "Ghi chú", href: "/notes" },
   { icon: ChartBar, label: "Dashboard", href: "/dashboard" },
   { icon: UserCircle, label: "Profile", href: "/profile" },
 ];
@@ -25,14 +26,14 @@ function Sidebar() {
       </div>
       <nav className="flex-1 px-3 flex flex-col gap-1">
         {navItems.map((item) => (
-          <a
+          <Link
             key={item.label}
-            href={item.href}
+            to={item.href}
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors"
           >
             <item.icon size={18} weight="regular" />
             {item.label}
-          </a>
+          </Link>
         ))}
       </nav>
       <div className="px-3 py-4 border-t border-white/10">

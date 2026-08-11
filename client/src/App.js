@@ -9,6 +9,9 @@ import Dashboard from "./pages/Dashboard";
 import CommentPage from "./pages/CommentPage";
 import UploadPage from "./pages/UploadPage";
 import Profile from "./pages/Profile";
+import NoteList from "./pages/NoteList";
+import NoteCreate from "./pages/NoteCreate";
+import NoteDetail from "./pages/NoteDetail";
 
 function AppRoutes() {
     const { token } = useAuth();
@@ -38,6 +41,19 @@ function AppRoutes() {
             <Route
                 path="/comments/:projectId?"
                 element={<ProtectedRoute><CommentPage /></ProtectedRoute>}
+            />
+            {/* Note routes - Người 1 */}
+            <Route
+                path="/notes"
+                element={<ProtectedRoute><NoteList /></ProtectedRoute>}
+            />
+            <Route
+                path="/notes/create"
+                element={<ProtectedRoute><NoteCreate /></ProtectedRoute>}
+            />
+            <Route
+                path="/notes/:id"
+                element={<ProtectedRoute><NoteDetail /></ProtectedRoute>}
             />
         </Routes>
     );
