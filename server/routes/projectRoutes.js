@@ -1,26 +1,15 @@
 const express = require("express");
-
 const router = express.Router();
-
-const authMiddleware = require("../middleware/authMiddleware");
-
 const {
-    createProject,
-    getProjects,
-    getProjectById,
-    updateProject,
-    deleteProject
+  getProjects,
+  createProject,
+  getProjectById,
+  updateProject,
+  deleteProject,
 } = require("../controllers/projectController");
+const protect = require("../middleware/authMiddleware");
 
-// Tạo Project
-router.post("/", authMiddleware, createProject);
-
-router.get("/", authMiddleware, getProjects);
-
-router.get("/:id", authMiddleware, getProjectById);
-
-router.put("/:id", authMiddleware, updateProject);
-
-router.delete("/:id", authMiddleware, deleteProject);
+router.route("/").get(protect, getProjects).post(protect, createProject);
+router.route("/:id").get(protect, getProjectById).put(protect, updateProject).delete(protect, deleteProject);
 
 module.exports = router;
