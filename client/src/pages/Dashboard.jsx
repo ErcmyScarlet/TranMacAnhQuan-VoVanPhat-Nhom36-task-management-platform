@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { SignOut, CheckCircle, CalendarBlank, ChartPieSlice, UserCircle } from "@phosphor-icons/react";
+import { useAuth } from "../context/AuthContext";
 
 import AppLayout from "../components/layout/AppLayout";
 import Card from "../components/common/Card";
@@ -17,6 +18,7 @@ function Dashboard() {
     const [tasks, setTasks] = useState([]);
     const [projectName, setProjectName] = useState("");
     const [loading, setLoading] = useState(true);
+    const { logoutUser } = useAuth();
 
     useEffect(() => {
         setLoading(true);

@@ -8,6 +8,7 @@ import FormField from "../components/common/FormField";
 import Input from "../components/common/Input";
 import EmptyState from "../components/common/EmptyState";
 import Skeleton from "../components/common/Skeleton";
+import AppLayout from "../components/layout/AppLayout";
 
 function ProjectList() {
   const [projects, setProjects] = useState([]);
@@ -37,7 +38,7 @@ function ProjectList() {
 };
 
   return (
-    <div>
+    <AppLayout>
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold">Project của bạn</h1>
@@ -113,7 +114,7 @@ function ProjectList() {
           <Button type="submit">Tạo project</Button>
         </form>
       </Modal>
-</div>
+</AppLayout>
   );
 }
 

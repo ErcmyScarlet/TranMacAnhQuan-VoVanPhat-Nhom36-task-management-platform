@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import CommentPage from "./pages/CommentPage";
 import UploadPage from "./pages/UploadPage";
 import Profile from "./pages/Profile";
+import ProjectList from "./pages/ProjectList";
 
 function AppRoutes() {
     const { token } = useAuth();
@@ -38,6 +39,10 @@ function AppRoutes() {
             <Route
                 path="/comments/:projectId?"
                 element={<ProtectedRoute><CommentPage /></ProtectedRoute>}
+            />
+            <Route
+                path="/projects"
+                element={<ProtectedRoute><ProjectList /></ProtectedRoute>}
             />
         </Routes>
     );
