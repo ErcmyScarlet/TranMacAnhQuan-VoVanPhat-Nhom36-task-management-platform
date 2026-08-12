@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Plus, FolderSimple } from "@phosphor-icons/react";
 import { getProjects, createProject, deleteProject } from "../api/projectApi";
 import Card from "../components/common/Card";
@@ -10,6 +11,7 @@ import EmptyState from "../components/common/EmptyState";
 import Skeleton from "../components/common/Skeleton";
 
 function ProjectList() {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -66,7 +68,10 @@ function ProjectList() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {projects.map((p) => (
-            <Card key={p._id} className="hover:border-accent/40 transition-colors cursor-pointer group">
+            <Card
+            key={p._id}
+            onClick={() => navigate(`/projects/${p._id}`)}
+            className="hover:border-accent/40 transition-colors cursor-pointer group">
               <div className="w-10 h-10 rounded-xl bg-accent-soft flex items-center justify-center mb-4">
                 <FolderSimple size={20} className="text-accent" />
               </div>
