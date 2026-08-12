@@ -10,6 +10,9 @@ import CommentPage from "./pages/CommentPage";
 import UploadPage from "./pages/UploadPage";
 import Profile from "./pages/Profile";
 import ProjectList from "./pages/ProjectList";
+import NoteList from "./pages/NoteList";
+import NoteCreate from "./pages/NoteCreate";
+import NoteDetail from "./pages/NoteDetail";
 
 function AppRoutes() {
     const { token } = useAuth();
@@ -40,11 +43,26 @@ function AppRoutes() {
                 path="/comments/:projectId?"
                 element={<ProtectedRoute><CommentPage /></ProtectedRoute>}
             />
+<<<<<<< HEAD
+    <Route
+        path="/projects"
+        element={<ProtectedRoute><ProjectList /></ProtectedRoute>}
+=======
+            {/* Note routes - Người 1 */}
             <Route
-                path="/projects"
-                element={<ProtectedRoute><ProjectList /></ProtectedRoute>}
+                path="/notes"
+                element={<ProtectedRoute><NoteList /></ProtectedRoute>}
             />
-        </Routes>
+            <Route
+                path="/notes/create"
+                element={<ProtectedRoute><NoteCreate /></ProtectedRoute>}
+            />
+            <Route
+                path="/notes/:id"
+                element={<ProtectedRoute><NoteDetail /></ProtectedRoute>}
+>>>>>>> VoVanPhat-dev
+    />
+        </Routes >
     );
 }
 

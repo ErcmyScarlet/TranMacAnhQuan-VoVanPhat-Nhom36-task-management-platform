@@ -8,6 +8,7 @@ app.use(express.json());
 
 const authRoutes = require("./routes/authRoutes");
 const projectRoutes = require("./routes/projectRoutes");
+const noteRoutes = require("./routes/noteRoutes");
 const userRoutes=require("./routes/userRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const commentRoutes = require("./routes/commentRoutes");
@@ -18,6 +19,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/notes", noteRoutes);
 app.use("/api/users",userRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/comments", commentRoutes);
