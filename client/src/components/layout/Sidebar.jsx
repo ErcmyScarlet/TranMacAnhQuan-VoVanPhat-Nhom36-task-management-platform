@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { House, FolderSimple, ChartBar, UserCircle, SignOut, NotePencil } from "@phosphor-icons/react";
+import { House, FolderSimple, ChartBar, UserCircle, SignOut, NotePencil, Bell } from "@phosphor-icons/react";
 import { useAuth } from "../../context/AuthContext";
 
 const navItems = [
