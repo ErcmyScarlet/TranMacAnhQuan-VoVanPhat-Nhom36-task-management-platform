@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-     "dev": "nodemon server.js",
-     "start": "node server.js"
-   },
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -19,7 +19,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.4",
     "node-cron": "^4.6.0",
-    "nodemailer": "^9.0.3"
+    "nodemailer": "^9.0.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

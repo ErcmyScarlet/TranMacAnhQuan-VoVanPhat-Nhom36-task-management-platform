@@ -4,6 +4,7 @@ require("dotenv").config();
     const connectDB = require("./config/db");
 
     connectDB();
+    require("./jobs/deadlineReminder");
     const app = express();
     app.use(cors());
     app.use(express.json());

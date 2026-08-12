@@ -1,23 +1,27 @@
 import { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import api from "../api/axios";
+import { getStats } from "../api/dashboardApi";
 import Card from "../components/common/Card";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+const statusLabel = { todo: "To Do", doing: "Doing", done: "Done" };
 
 function Dashboard() {
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
-    api.get("/dashboard/stats").then((res) => setStats(res.data.data));
+    getStats().then((res) => setStats(res.data.data));
   }, []);
 
   if (!stats) return <p className="text-muted text-sm">Đang tải...</p>;
 
   const total = stats.byStatus.reduce((sum, s) => sum + s.count, 0);
+  const doneCount = stats.byStatus.find((s) => s._id === "done")?.count || 0;
+
   const chartData = {
-    labels: stats.byStatus.map((s) => s._id),
+    labels: stats.byStatus.map((s) => statusLabel[s._id] || s._id),
     datasets: [
       {
         data: stats.byStatus.map((s) => s.count),
@@ -36,20 +40,22 @@ function Dashboard() {
           <p className="text-3xl font-display font-semibold">{total}</p>
         </Card>
         <Card>
-          <p className="text-sm text-muted mb-1">Quá hạn</p>
-          <p className="text-3xl font-display font-semibold text-danger">{stats.overdue}</p>
+          <p className="text-sm text-muted mb-1">Hoàn thành</p>
+          <p className="text-3xl font-display font-semibold text-success">{doneCount}</p>
         </Card>
         <Card>
-          <p className="text-sm text-muted mb-1">Hoàn thành</p>
-          <p className="text-3xl font-display font-semibold text-success">
-            {stats.byStatus.find((s) => s._id === "done")?.count || 0}
+          <p className="text-sm text-muted mb-1">Tỉ lệ hoàn thành</p>
+          <p className="text-3xl font-display font-semibold text-accent">
+            {total > 0 ? Math.round((doneCount / total) * 100) : 0}%
           </p>
         </Card>
       </div>
-      <Card className="max-w-md">
-        <p className="text-sm font-medium mb-4">Phân bố theo trạng thái</p>
-        <Doughnut data={chartData} />
-      </Card>
+      {total > 0 && (
+        <Card className="max-w-md">
+          <p className="text-sm font-medium mb-4">Phân bố theo trạng thái</p>
+          <Doughnut data={chartData} />
+        </Card>
+      )}
     </div>
   );
 }
