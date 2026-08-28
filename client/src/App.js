@@ -10,6 +10,7 @@ import CommentPage from "./pages/CommentPage";
 import UploadPage from "./pages/UploadPage";
 import Profile from "./pages/Profile";
 import ProjectList from "./pages/ProjectList";
+import ProjectDetail from "./pages/ProjectDetail";
 import NoteList from "./pages/NoteList";
 import NoteCreate from "./pages/NoteCreate";
 import NoteDetail from "./pages/NoteDetail";
@@ -47,6 +48,10 @@ function AppRoutes() {
             <Route
                 path="/projects"
                 element={<ProtectedRoute><ProjectList /></ProtectedRoute>}
+            />
+            <Route
+                path="/projects/:id"
+                element={<ProtectedRoute><ProjectDetail /></ProtectedRoute>}
             />
             <Route
                 path="/reminders"

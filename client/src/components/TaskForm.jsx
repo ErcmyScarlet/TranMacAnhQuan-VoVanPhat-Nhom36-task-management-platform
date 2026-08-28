@@ -5,13 +5,17 @@ import Input from "./common/Input";
 import Select from "./common/Select";
 import Button from "./common/Button";
 
-function TaskForm({ projectId, onCreated }) {
-  const [form, setForm] = useState({ title: "", description: "", dueDate: "", priority: "medium" });
+function TaskForm({ projectId, members = [], onCreated }) {
+  const [form, setForm] = useState({ title: "", description: "", dueDate: "", priority: "medium", assigneeId: "" });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await createTask({ ...form, projectId });
-    setForm({ title: "", description: "", dueDate: "", priority: "medium" });
+    await createTask({ 
+      ...form, 
+      projectId, 
+      assigneeId: form.assigneeId || undefined 
+    });
+    setForm({ title: "", description: "", dueDate: "", priority: "medium", assigneeId: "" });
     onCreated();
   };
 
@@ -51,6 +55,20 @@ function TaskForm({ projectId, onCreated }) {
           <option value="low">Thấp</option>
           <option value="medium">Trung bình</option>
           <option value="high">Cao</option>
+        </Select>
+      </FormField>
+      <FormField label="Người thực hiện" id="task-assignee">
+        <Select
+          id="task-assignee"
+          value={form.assigneeId}
+          onChange={(e) => setForm({ ...form, assigneeId: e.target.value })}
+        >
+          <option value="">Chưa phân công</option>
+          {members.map((m) => (
+            <option key={m._id} value={m._id}>
+              {m.name || m.email}
+            </option>
+          ))}
         </Select>
       </FormField>
       <Button type="submit">Thêm task</Button>

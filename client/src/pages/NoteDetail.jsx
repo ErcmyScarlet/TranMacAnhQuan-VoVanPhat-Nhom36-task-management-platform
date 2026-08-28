@@ -10,6 +10,7 @@ import {
     PencilSimple,
 } from "@phosphor-icons/react";
 import { getNoteById, updateNote, deleteNote, toggleNoteComplete } from "../api/noteApi";
+import { getNoteComments, createComment, deleteComment as deleteCommentApi } from "../services/commentService";
 import AppLayout from "../components/layout/AppLayout";
 import Card from "../components/common/Card";
 import Button from "../components/common/Button";
@@ -34,6 +35,15 @@ function NoteDetail() {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
 
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState("");
+    const [commentLoading, setCommentLoading] = useState(false);
+    const [commentSubmitting, setCommentSubmitting] = useState(false);
+
+    const user = JSON.parse(
+        localStorage.getItem("user") || "null"
+    );
+
     const loadNote = async () => {
         try {
             setLoading(true);
@@ -55,9 +65,53 @@ function NoteDetail() {
         }
     };
 
+    const loadComments = async () => {
+        try {
+            setCommentLoading(true);
+            const data = await getNoteComments(id);
+            setComments(data || []);
+        } catch (err) {
+            console.error("Lỗi lấy bình luận:", err);
+        } finally {
+            setCommentLoading(false);
+        }
+    };
+
     useEffect(() => {
         loadNote();
+        loadComments();
     }, [id]);
+
+    const handleCommentSubmit = async (e) => {
+        e.preventDefault();
+        if (!newComment.trim()) return;
+
+        try {
+            setCommentSubmitting(true);
+            await createComment({
+                note: id,
+                content: newComment
+            });
+            setNewComment("");
+            await loadComments();
+        } catch (err) {
+            console.error("Lỗi gửi bình luận:", err);
+            setError(err.response?.data?.message || "Không thể gửi bình luận");
+        } finally {
+            setCommentSubmitting(false);
+        }
+    };
+
+    const handleCommentDelete = async (commentId) => {
+        if (!window.confirm("Bạn có chắc muốn xóa bình luận này?")) return;
+        try {
+            await deleteCommentApi(commentId);
+            await loadComments();
+        } catch (err) {
+            console.error("Lỗi xóa bình luận:", err);
+            setError("Không thể xóa bình luận");
+        }
+    };
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -315,6 +369,71 @@ function NoteDetail() {
                         </Button>
                     </div>
                 )}
+
+                {/* Comments Section */}
+                <div className="space-y-4 border-t border-border pt-6">
+                    <h3 className="text-lg font-semibold text-ink">
+                        Bình luận ({comments.length})
+                    </h3>
+
+                    {/* Write comment */}
+                    <form onSubmit={handleCommentSubmit} className="space-y-3">
+                        <textarea
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="Viết bình luận của bạn..."
+                            rows={3}
+                            className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-surface text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors resize-none"
+                            disabled={commentSubmitting}
+                        />
+                        <div className="flex justify-end">
+                            <Button type="submit" disabled={commentSubmitting || !newComment.trim()}>
+                                {commentSubmitting ? "Đang gửi..." : "Gửi bình luận"}
+                            </Button>
+                        </div>
+                    </form>
+
+                    {/* Comments list */}
+                    {commentLoading ? (
+                        <div className="space-y-3">
+                            <div className="h-12 bg-border/40 rounded-xl animate-pulse" />
+                            <div className="h-12 bg-border/40 rounded-xl animate-pulse" />
+                        </div>
+                    ) : comments.length === 0 ? (
+                        <p className="text-sm text-muted italic py-4">Chưa có bình luận nào.</p>
+                    ) : (
+                        <div className="space-y-3">
+                            {comments.map((comment) => {
+                                const currentUserId = user?.id || user?._id;
+                                const canDelete = comment.author?._id === currentUserId || comment.author === currentUserId;
+                                return (
+                                    <div key={comment._id} className="flex gap-3 items-start bg-surface border border-border p-4 rounded-2xl">
+                                        <div className="flex-1 space-y-1">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-xs font-semibold text-ink">
+                                                    {comment.author?.name || "Người dùng"}
+                                                </span>
+                                                <span className="text-[10px] text-muted">
+                                                    {new Date(comment.createdAt).toLocaleString("vi-VN")}
+                                                </span>
+                                            </div>
+                                            <p className="text-sm text-ink whitespace-pre-wrap">{comment.content}</p>
+                                        </div>
+                                        {canDelete && (
+                                            <button
+                                                onClick={() => handleCommentDelete(comment._id)}
+                                                className="text-muted hover:text-danger p-1 rounded transition-colors"
+                                                title="Xóa bình luận"
+                                            >
+                                                <Trash size={14} />
+                                            </button>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
             </div>
         </AppLayout>
     );

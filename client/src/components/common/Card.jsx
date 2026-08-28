@@ -1,6 +1,10 @@
-function Card({ children, className = "" }) {
+function Card({ children, className = "", onClick, ...props }) {
   return (
-    <div className={`bg-surface border border-border rounded-2xl shadow-soft p-6 ${className}`}>
+    <div
+      onClick={onClick}
+      className={`bg-surface border border-border rounded-2xl shadow-soft p-6 ${className}`}
+      {...props}
+    >
       {children}
     </div>
   );

@@ -42,7 +42,7 @@ function Login() {
                             <SignIn size={24} />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-semibold">TaskFlow</h1>
+                            <h1 className="text-3xl font-semibold">QP</h1>
                             <p className="text-sm text-white/90 mt-2">Quản lý công việc thông minh và đơn giản.</p>
                         </div>
                     </div>

@@ -45,7 +45,7 @@ function Register() {
                         </div>
                         <div>
                             <h1 className="text-3xl font-semibold">Tạo tài khoản</h1>
-                            <p className="text-sm text-white/90 mt-2">Bắt đầu quản lý công việc cùng TaskFlow.</p>
+                            <p className="text-sm text-white/90 mt-2">Bắt đầu quản lý công việc cùng QP.</p>
                         </div>
                     </div>
                 </div>

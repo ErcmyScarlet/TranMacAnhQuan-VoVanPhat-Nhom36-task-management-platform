@@ -35,8 +35,11 @@ exports.getProjectById = async (req, res) => {
     try {
         const project = await Project.findOne({
             _id: req.params.id,
-            createdBy: req.user.id,
-        });
+            $or: [
+                { createdBy: req.user.id },
+                { memberIds: req.user.id },
+            ],
+        }).populate("memberIds", "name email");
 
         if (!project) {
             return res.status(404).json({
