@@ -5,7 +5,7 @@ const Note = require("../models/Note");
 const transporter = require("../config/mailer");
 const { startOfTodayVN, formatVN } = require("../utils/vietnamTime");
 
-cron.schedule("* * * 0 *", async () => {
+cron.schedule("* 0 * * *", async () => {
   const now = new Date();
   const startOfToday = startOfTodayVN();
   const in24h = new Date(now.getTime() + 24 * 60 * 60 * 1000);
